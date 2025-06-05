@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Customer Support Chatbot</title>
+</head>
+<body>
+  <h2>Ask the Chatbot</h2>
+  <input type="text" id="message" placeholder="Type your question..." />
+  <button onclick="sendMessage()">Send</button>
+  <p><strong>Bot:</strong> <span id="response"></span></p>
+
+  <script>
+    function sendMessage() {
+      const message = document.getElementById("message").value;
+
+      fetch('http://127.0.0.1:5000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ question: message }) // <-- send actual user input
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Display the answer in the HTML
+        document.getElementById("response").textContent = data.answer;
+        console.log(data);
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        document.getElementById("response").textContent = "Error contacting the server.";
+      });
+    }
+  </script>
+</body>
+</html>
